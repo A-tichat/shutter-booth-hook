@@ -31,7 +31,7 @@ func main() {
 		return ctx.Next()
 	})
 
-	port := os.Getenv("PORT")
+	port := os.Getenv("GO_PORT")
 	if port == "" {
 		port = "8080"
 	}

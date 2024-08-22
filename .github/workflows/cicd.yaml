@@ -30,8 +30,9 @@ jobs:
       with:
         name: ${{ env.FUNCTION_NAME }}
         runtime: 'go121'
-        entrypoint: main
+        entry_point: main
         region: 'asia-southeast1'
         memory: '128M'
         environment_variables: |-
-          PORT=80
+          GO_PORT=80
+          GO_ENV=production
