@@ -1,7 +1,7 @@
 name: 'ShutterBooth Hook to Cloud Run'
 
 env:
-  PROJECT_ID: 'game-test'
+  PROJECT_ID: 'game-test-421210'
   FUNCTION_NAME: 'shutterbooth-hook'
 
 on:
