@@ -32,6 +32,6 @@ jobs:
         runtime: 'go121'
         entrypoint: main
         region: 'asia-southeast1'
-        memory: '128MB'
+        memory: '128M'
         environment_variables: |-
           PORT=80
