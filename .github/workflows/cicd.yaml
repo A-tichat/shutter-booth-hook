@@ -30,7 +30,6 @@ jobs:
       with:
         name: ${{ env.FUNCTION_NAME }}
         runtime: 'go121'
-        entry_point: main
         region: 'asia-southeast1'
         environment_variables: |-
           GO_PORT=80
