@@ -1,0 +1,6 @@
+# git.akyoto.dev/go/router v0.1.4
+## explicit; go 1.22
+git.akyoto.dev/go/router
+# git.akyoto.dev/go/web v0.0.0-20240622114143-d91c1313942e
+## explicit; go 1.22
+git.akyoto.dev/go/web
