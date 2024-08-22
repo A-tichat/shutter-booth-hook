@@ -1,4 +1,4 @@
-package server
+package main
 
 import (
 	"fmt"
@@ -9,7 +9,7 @@ import (
 	"git.akyoto.dev/go/web"
 )
 
-func Server() {
+func main() {
 	s := web.NewServer()
 	router := s.Router()
 

@@ -30,7 +30,8 @@ jobs:
       with:
         name: ${{ env.FUNCTION_NAME }}
         runtime: 'go121'
-        https_trigger_security_level: 'secure_optional'
-        source_dir: 'src/server'
+        entrypoint: main
         region: 'asia-southeast1'
-        memory_mb: '128'
+        memory: '128MB'
+        environment_variables: |-
+          PORT=80
