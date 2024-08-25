@@ -1,9 +1,10 @@
 name: 'ShutterBooth Hook to Cloud Run'
 
 env:
+  GCP_PROJECT_ID: 'game-test-421210'
   GCR_SERVICE_NAME: 'shutterbooth-hook'
   REGION: 'asia-southeast1'
-  GAR_LOCATION: 'asia-southeast1-docker.pkg.dev/game-test-421210/shutterbooth-hook'
+  GAR_LOCATION: 'asia-southeast1-docker.pkg.dev'
 
 on:
   push:
@@ -22,7 +23,7 @@ jobs:
     - name: 'GCloud Auth'
       uses: 'google-github-actions/auth@v2'
       with:
-        project_id: ${{ secrets.GCP_PROJECT_ID }}
+        project_id: ${{ env.GCP_PROJECT_ID }}
         credentials_json: ${{ secrets.GCP_SA_KEY }}
     
     - name: 'Configure Docker'
@@ -30,10 +31,10 @@ jobs:
         gcloud auth configure-docker ${{ env.GAR_LOCATION }} --quiet
 
     - name: 'Build image'
-      run: docker build -t ${{ env.GAR_LOCATION }} .
+      run: "docker build -t $GAR_LOCATION/$GCP_PROJECT_ID/$GCR_SERVICE_NAME:$GITHUB_SHA ."
 
     - name: 'Push image'
-      run: docker push ${{ env.GAR_LOCATION }}
+      run: "docker push $GAR_LOCATION/$GCP_PROJECT_ID/$GCR_SERVICE_NAME:$GITHUB_SHA"
 
     - name: 'GCloud Deploy'
       uses: 'google-github-actions/deploy-cloudrun@v2'
