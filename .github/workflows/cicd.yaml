@@ -4,8 +4,8 @@ env:
   GCR_SERVICE_NAME: 'shutterbooth-hook'
   REGION: 'asia-southeast1'
   GAR_LOCATION: 'asia-southeast1-docker.pkg.dev/game-test-421210/shutterbooth-hook'
-  TAG_LATEST: "$GAR_LOCATION/main:latest"
-  TAG_COMMIT: "$GAR_LOCATION/main:$GITHUB_SHA"
+  TAG_LATEST: "$GAR_LOCATION:latest"
+  TAG_COMMIT: "$GAR_LOCATION:$GITHUB_SHA"
 
 on:
   push:
