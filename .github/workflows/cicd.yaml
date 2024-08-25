@@ -5,7 +5,6 @@ env:
   REGION: 'asia-southeast1'
   GAR_LOCATION: 'asia-southeast1-docker.pkg.dev/game-test-421210/shutterbooth-hook'
   TAG_LATEST: "$GAR_LOCATION:latest"
-  TAG_COMMIT: "$GAR_LOCATION:$GITHUB_SHA"
 
 on:
   push:
@@ -29,13 +28,13 @@ jobs:
     
     - name: 'Configure Docker'
       run: |-
-        gcloud auth configure-docker ${{ secrets.GAR_LOCATION }} --quiet
+        gcloud auth configure-docker ${{ env.GAR_LOCATION }} --quiet
 
     - name: 'Build image'
-      run: docker build -t ${{ env.TAG_LATEST }} -t ${{ env.TAG_COMMIT }} .
+      run: docker build -t ${{ env.TAG_LATEST }} .
 
     - name: 'Push image'
-      run: docker push ${{ env.TAG_COMMIT }} && docker push ${{ env.TAG_LATEST }}
+      run: docker push ${{ env.TAG_LATEST }}
 
     - name: 'GCloud Deploy'
       uses: 'google-github-actions/deploy-cloudrun@v2'
