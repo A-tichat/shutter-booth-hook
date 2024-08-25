@@ -1,8 +1,7 @@
 name: 'ShutterBooth Hook to Cloud Run'
 
 env:
-  GAR_LOCATION: '${{ vars.GC_REGION }}-docker.pkg.dev'
-  IMAGE: '${{ env.GAR_LOCATION }}/${{ vars.GC_PROJECT_ID }}/${{ vars.GCR_SERVICE_NAME }}/sb-hook:main'
+  IMAGE: '${{ vars.GC_REGION }}-docker.pkg.dev/${{ vars.GC_PROJECT_ID }}/${{ vars.GCR_SERVICE_NAME }}/sb-hook:main'
 
 on:
   push:
@@ -26,7 +25,7 @@ jobs:
     
     - name: 'Configure Docker'
       run: |-
-        gcloud auth configure-docker ${{ env.GAR_LOCATION }} --quiet
+        gcloud auth configure-docker "${{ vars.GC_REGION }}-docker.pkg.dev" --quiet
 
     - name: 'Build image'
       run: 'docker build -t ${{ env.IMAGE }} .'
