@@ -5,13 +5,12 @@ import (
 )
 
 type OmiseController struct {
-	Callback func(ctx web.Context) error
 }
 
 func New() *OmiseController {
 	return &OmiseController{}
 }
 
-func Callback(ctx web.Context) error {
+func (ctr OmiseController) Callback(ctx web.Context) error {
 	return ctx.String("Success")
 }

@@ -8,12 +8,11 @@ import (
 	"github.com/a-tichat/go-web/internal/config"
 )
 
-func Server() {
+func Server(conf *config.Config) {
 	s := web.NewServer()
 
 	router.ConfigureRoutes(s)
-	config := config.NewConfig()
 
-	fmt.Printf("Server running \"%s\" mode on port %s\n", config.Env, config.HTTP.Port)
-	s.Run(config.HTTP.GetServerAddr())
+	fmt.Printf("Server running \"%s\" mode on port %s\n", conf.Env, conf.HTTP.Port)
+	s.Run(conf.HTTP.GetServerAddr())
 }
