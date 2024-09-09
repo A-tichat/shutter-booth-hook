@@ -10,7 +10,7 @@ type HTTPConfig struct {
 	Port string `required:"true"`
 }
 
-const defaultPort = "8080"
+const defaultPort = "3000"
 
 func LoadHTTPConfig() HTTPConfig {
 	port := defaultPort
