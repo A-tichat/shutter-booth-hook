@@ -40,7 +40,6 @@ jobs:
         image: '${{ env.IMAGE }}'
         region: ${{ vars.GC_REGION }}
         env_vars: |-
-          GO_PORT=80
           GO_ENV=production
           OMISE_API_KEY=${{ secrets.OMISE_API_KEY }}
           OMISE_SECRET_KEY=${{ secrets.OMISE_SECRET_KEY }}

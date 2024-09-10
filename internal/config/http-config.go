@@ -14,8 +14,8 @@ const defaultPort = "3000"
 
 func LoadHTTPConfig() HTTPConfig {
 	port := defaultPort
-	if goPort := os.Getenv("GO_PORT"); goPort != "" {
-		port = goPort
+	if appPort := os.Getenv("PORT"); appPort != "" {
+		port = appPort
 	}
 
 	return HTTPConfig{

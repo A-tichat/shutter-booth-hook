@@ -10,8 +10,8 @@ COPY --from=dependencies /go/pkg /go/pkg
 RUN make build
 
 FROM alpine:3.20
-ARG GO_PORT 3000
-EXPOSE ${GO_PORT}
+ARG PORT 3000
+EXPOSE ${PORT}
 WORKDIR /app
 COPY --from=builder /app/build ./
 CMD ["./app"]
