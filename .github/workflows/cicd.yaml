@@ -4,8 +4,8 @@ env:
   IMAGE: '${{ vars.GC_REGION }}-docker.pkg.dev/${{ vars.GC_PROJECT_ID }}/${{ vars.GCR_SERVICE_NAME }}/sb-hook:main'
 
 on:
-  push:
-    branches: [ "main", "github-action" ]
+  repository_dispatch:
+    types: [deploy]
 
 jobs:
   build-and-deploy:
