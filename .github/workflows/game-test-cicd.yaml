@@ -5,12 +5,12 @@ on: workflow_dispatch
 jobs:
   development-deploy:
     runs-on: 'ubuntu-latest'
-    if: ${{ $GITHUB_REF_NAME == 'develop' }}
+    if: ${{ github.ref_name == 'develop' }}
 
     steps:
     - uses: 'actions/checkout@v4'
 
-    - run: echo "Deploying ${{ $GITHUB_REF_NAME }}"
+    - run: echo "Deploying $GITHUB_REF_NAME"
 
   else-deploy:
     runs-on: 'ubuntu-latest'
@@ -18,4 +18,4 @@ jobs:
     steps:
     - uses: 'actions/checkout@v4'
 
-    - run: echo "Deploying on ${{ $GITHUB_REF_NAME }}"
+    - run: echo "Deploying on $GITHUB_REF_NAME"
