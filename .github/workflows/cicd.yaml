@@ -1,7 +1,7 @@
 name: 'ShutterBooth Hook to Cloud Run'
 
 env:
-  IMAGE: '${{ vars.GC_REGION }}-docker.pkg.dev/${{ vars.GC_PROJECT_ID }}/${{ vars.GCR_SERVICE_NAME }}/sb-hook:main'
+  IMAGE: '${{ vars.GC_REGION }}-docker.pkg.dev/${{ vars.GC_PROJECT_ID }}/${{ vars.GCR_SERVICE_NAME }}/sb-hook:${{ env.GITHUB_REF_NAME }}'
 
 on:
   workflow_dispatch:
@@ -9,7 +9,7 @@ on:
 jobs:
   development-deploy:
     runs-on: 'ubuntu-latest'
-    if: ${{ GITHUB_REF_NAME == 'develop' }}
+    if: ${{ env.GITHUB_REF_NAME == 'develop' }}
     permissions:
       contents: 'read'
       id-token: 'write'
@@ -46,7 +46,7 @@ jobs:
 
   production-deploy:
     runs-on: 'ubuntu-latest'
-    if: ${{ GITHUB_REF_NAME == 'main' }}
+    if: ${{ env.GITHUB_REF_NAME == 'main' }}
     permissions:
       contents: 'read'
       id-token: 'write'
