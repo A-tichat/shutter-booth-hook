@@ -4,8 +4,13 @@ env:
   IMAGE: '${{ vars.GC_REGION }}-docker.pkg.dev/${{ vars.GC_PROJECT_ID }}/${{ vars.GCR_SERVICE_NAME }}/sb-hook:main'
 
 on:
-  repository_dispatch:
-    types: [deploy]
+  workflow_dispatch:
+    inputs:
+      environment:
+        required: true
+        type: 'environment'
+        description: 'specify deploy environment'
+
 
 jobs:
   build-and-deploy:
@@ -16,6 +21,9 @@ jobs:
 
     steps:
     - uses: 'actions/checkout@v4'
+
+    - name: 'Starting...'
+      run: 'echo "Deploying ${{ inputs.environment }}"'
 
     - name: 'GCloud Auth'
       uses: 'google-github-actions/auth@v2'
