@@ -1,16 +1,12 @@
-package health
+package healthCtr
 
 import (
-	"git.akyoto.dev/go/web"
+	"context"
+
+	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/protocol/consts"
 )
 
-type HealthController struct {
-}
-
-func New() HealthController {
-	return HealthController{}
-}
-
-func (ctr HealthController) CheckHealth(c web.Context) error {
-	return c.String("OK")
+func CheckHealth(ctx context.Context, c *app.RequestContext) {
+	c.String(consts.StatusOK, "OK")
 }

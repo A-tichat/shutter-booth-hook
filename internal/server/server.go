@@ -1,52 +1,56 @@
 package server
 
 import (
+	"context"
 	"fmt"
-	"net/http"
 	"time"
 
-	"git.akyoto.dev/go/web"
 	"github.com/a-tichat/go-web/internal/config"
-	"github.com/a-tichat/go-web/internal/health"
-	"github.com/a-tichat/go-web/internal/omise"
+	healthCtr "github.com/a-tichat/go-web/internal/health"
+	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/app/server"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
 )
 
 const HEALTH_PATH = "/health"
 const METRICS_PATH = "/metrics"
 
 func Server(conf *config.Config) {
-	s := web.NewServer()
-
 	IGNORE_PATH := getIgnorePath()
-	router := s.Router()
+	hlog.SetLevel(hlog.LevelDebug)
 
-	healthCtr := health.New()
-	router.Add(http.MethodGet, "/health", healthCtr.CheckHealth)
+	s := server.Default(
+		server.WithHostPorts(conf.HTTP.GetServerAddr()),
+	)
 
-	omiseCtr := omise.New()
-	router.Add(http.MethodPost, "/omise-callback", omiseCtr.Callback)
-
-	s.Use(func(c web.Context) error {
+	s.Use(func(ctx context.Context, c *app.RequestContext) {
 		start := time.Now()
 
 		defer func() {
-			if _, ok := IGNORE_PATH[c.Request().Path()]; ok {
+			if _, ok := IGNORE_PATH[string(c.Path())]; ok {
 				return
 			}
 
-			fmt.Printf("[%s] %s %s %d - %v\n",
-				time.Now().Format("2006-01-02 15:04:05"),
-				c.Request().Method(),
-				c.Request().Path(),
-				c.Response().Status(),
+			hlog.Debugf("%s %s %d - %v\n",
+				c.Method(),
+				c.Path(),
+				c.Response.StatusCode(),
 				time.Since(start))
+
+			// fmt.Printf("[%s] %s %s %d - %v\n",
+			// 	time.Now().Format("2006-01-02 15:04:05"),
+			// 	c.Request().Method(),
+			// 	c.Request().Path(),
+			// 	c.Response().Status(),
+			// 	time.Since(start))
 		}()
 
-		return c.Next()
+		c.Next(ctx)
 	})
 
-	fmt.Printf("Server running \"%s\" mode on port %s\n", conf.Env, conf.HTTP.Port)
-	s.Run(conf.HTTP.GetServerAddr())
+	s.GET("/health", healthCtr.CheckHealth)
+
+	s.Spin()
 }
 
 // get path to ignore logging
