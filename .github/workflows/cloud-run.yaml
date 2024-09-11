@@ -1,7 +1,7 @@
 name: 'Deploy to Cloud run'
 
 env:
-  IMAGE: '${{ vars.GC_REGION }}-docker.pkg.dev/${{ vars.GC_PROJECT_ID }}/${{ vars.GCR_SERVICE_NAME }}/sb-hook:$GITHUB_REF_NAME'
+  IMAGE: '${{ vars.GC_REGION }}-docker.pkg.dev/${{ vars.GC_PROJECT_ID }}/${{ vars.GCR_SERVICE_NAME }}/sb-hook:${{ github.ref_name }}'
 
 on:
   workflow_dispatch:
