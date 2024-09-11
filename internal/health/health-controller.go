@@ -1,6 +1,8 @@
 package health
 
-import "git.akyoto.dev/go/web"
+import (
+	"git.akyoto.dev/go/web"
+)
 
 type HealthController struct {
 }
