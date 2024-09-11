@@ -5,16 +5,11 @@ env:
 
 on:
   workflow_dispatch:
-    inputs:
-      environment:
-        required: true
-        type: 'environment'
-        description: 'specify deploy environment'
-
 
 jobs:
-  build-and-deploy:
+  development-deploy:
     runs-on: 'ubuntu-latest'
+    if: ${{ GITHUB_REF_NAME == 'develop' }}
     permissions:
       contents: 'read'
       id-token: 'write'
@@ -22,8 +17,42 @@ jobs:
     steps:
     - uses: 'actions/checkout@v4'
 
-    - name: 'Starting...'
-      run: 'echo "Deploying ${{ inputs.environment }}"'
+    - name: 'GCloud Auth'
+      uses: 'google-github-actions/auth@v2'
+      with:
+        project_id: ${{ vars.GC_PROJECT_ID }}
+        credentials_json: ${{ secrets.GCP_SA_KEY }}
+    
+    - name: 'Configure Docker'
+      run: |-
+        gcloud auth configure-docker "${{ vars.GC_REGION }}-docker.pkg.dev" --quiet
+
+    - name: 'Build image'
+      run: 'docker build -t ${{ env.IMAGE }} .'
+
+    - name: 'Push image'
+      run: 'docker push ${{ env.IMAGE }}'
+
+    - name: 'GCloud Deploy'
+      uses: 'google-github-actions/deploy-cloudrun@v2'
+      with:
+        service: ${{ vars.GCR_SERVICE_NAME }}
+        image: '${{ env.IMAGE }}'
+        region: ${{ vars.GC_REGION }}
+        env_vars: |-
+          GO_ENV=development
+          OMISE_API_KEY=${{ secrets.OMISE_API_KEY }}
+          OMISE_SECRET_KEY=${{ secrets.OMISE_SECRET_KEY }}
+
+  production-deploy:
+    runs-on: 'ubuntu-latest'
+    if: ${{ GITHUB_REF_NAME == 'main' }}
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+    - uses: 'actions/checkout@v4'
 
     - name: 'GCloud Auth'
       uses: 'google-github-actions/auth@v2'
