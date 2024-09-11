@@ -11,3 +11,11 @@ jobs:
     - uses: 'actions/checkout@v4'
 
     - run: echo "Deploying ${{ $GITHUB_REF_NAME }}"
+
+  else-deploy:
+    runs-on: 'ubuntu-latest'
+
+    steps:
+    - uses: 'actions/checkout@v4'
+
+    - run: echo "Deploying on ${{ $GITHUB_REF_NAME }}"
