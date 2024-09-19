@@ -6,8 +6,8 @@ env:
 on: workflow_dispatch
 
 jobs:
-  build-and-deploy:
-    environment: CI
+  build:
+    environment: production
     runs-on: 'ubuntu-latest'
     permissions:
       contents: 'read'
@@ -15,6 +15,8 @@ jobs:
 
     steps:
     - uses: 'actions/checkout@v4'
+
+    - run: echo "pipeline running on ${{ vars.GO_ENV }}"
 
     - name: 'GCloud Auth'
       uses: 'google-github-actions/auth@v2'
@@ -32,6 +34,23 @@ jobs:
     - name: 'Push image'
       run: 'docker push ${{ env.IMAGE }}'
 
+  deploy:
+    environment: production
+    runs-on: 'ubuntu-latest'
+    needs: build
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+    - uses: 'actions/checkout@v4'
+
+    - name: 'GCloud Auth'
+      uses: 'google-github-actions/auth@v2'
+      with:
+        project_id: ${{ vars.GC_PROJECT_ID }}
+        credentials_json: ${{ secrets.GCP_SA_KEY }}
+    
     - name: 'GCloud Deploy'
       uses: 'google-github-actions/deploy-cloudrun@v2'
       with:
@@ -39,6 +58,6 @@ jobs:
         image: '${{ env.IMAGE }}'
         region: ${{ vars.GC_REGION }}
         env_vars: |-
-          GO_ENV=production
+          GO_ENV={{ vars.GO_ENV }}
           OMISE_API_KEY=${{ secrets.OMISE_API_KEY }}
           OMISE_SECRET_KEY=${{ secrets.OMISE_SECRET_KEY }}

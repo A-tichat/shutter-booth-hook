@@ -1,0 +1,17 @@
+name: '(Sit) Deploy to Cloud run'
+
+env:
+  IMAGE: '${{ vars.GC_REGION }}-docker.pkg.dev/${{ vars.GC_PROJECT_ID }}/${{ vars.GCR_SERVICE_NAME }}/sb-hook:{{ $GITHUB_HEAD_REF }}'
+
+on: 
+  pull_request:
+    branches: [ "develop" ]
+
+jobs:
+  test:
+    environment: development
+    runs-on: 'ubuntu-latest'
+    steps:
+    - run: echo "pipeline running on ${{ vars.GO_ENV }}"
+    - run: echo "env.image ${{ env.IMAGE }}"
+    
